@@ -31,6 +31,14 @@ class MostAffectedPanel extends StatelessWidget {
                   width: 10,
                 ),
                 Text(
+                  'Cases:' + countryData[index]['cases'].toString(),
+                  style:
+                      TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
                   'Deaths:' + countryData[index]['deaths'].toString(),
                   style:
                       TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
@@ -39,7 +47,7 @@ class MostAffectedPanel extends StatelessWidget {
             ),
           );
         },
-        itemCount: 5,
+        itemCount: 10,
       ),
     );
   }

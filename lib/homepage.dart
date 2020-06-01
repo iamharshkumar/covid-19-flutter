@@ -7,6 +7,7 @@ import 'package:covid19/panels/mosteffectedcountries.dart';
 import 'package:covid19/panels/worldwidepanel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:pie_chart/pie_chart.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -28,105 +29,139 @@ class _HomePageState extends State<HomePage> {
 
   fetchCountryData() async {
     http.Response response =
-        await http.get('https://corona.lmao.ninja/v2/countries');
+        await http.get('https://corona.lmao.ninja/v2/countries?sort=cases');
     setState(() {
       countryData = json.decode(response.body);
     });
   }
 
+  Future fetchData() async {
+    fetchWorldWideData();
+    fetchCountryData();
+  }
+
   @override
   void initState() {
     super.initState();
-    fetchWorldWideData();
-    fetchCountryData();
+    fetchData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Theme.of(context).brightness == Brightness.light
+                ? Icons.lightbulb_outline
+                : Icons.highlight),
+            onPressed: () {},
+          )
+        ],
         title: Text("COVID-19 TRACKER"),
       ),
-      body: SingleChildScrollView(
-          child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(10),
-            height: 100,
-            color: Colors.orange[100],
-            child: Text(
-              DataSource.quote,
-              style: TextStyle(
-                  color: Colors.orange[800],
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16),
+      body: RefreshIndicator(
+        onRefresh: fetchData,
+        child: SingleChildScrollView(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(10),
+              height: 100,
+              color: Colors.orange[100],
+              child: Text(
+                DataSource.quote,
+                style: TextStyle(
+                    color: Colors.orange[800],
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  'Worldwide',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => CountryPage()));
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        color: primaryBlack,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Text(
-                      'Regional',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    'Worldwide',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CountryPage()));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: primaryBlack,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Text(
+                        'Regional',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
                     ),
                   ),
-                ),
+                ],
+              ),
+            ),
+            worldData == null
+                ? Center(child: CircularProgressIndicator())
+                : WorldwidePanel(worldData: worldData),
+            worldData==null ? Container() :PieChart(
+              dataMap: {
+                'Confirmed': worldData['cases'].toDouble(),
+                'Active': worldData['active'].toDouble(),
+                'Recovered': worldData['recovered'].toDouble(),
+                'Deaths': worldData['deaths'].toDouble(),
+              },
+              colorList: [
+                Colors.deepOrangeAccent,
+                Colors.blue,
+                Colors.green,
+                Colors.red,
+
+
               ],
             ),
-          ),
-          worldData == null
-              ? CircularProgressIndicator()
-              : WorldwidePanel(worldData: worldData),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
-            child: Text(
-              'Most affected Countries',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-          ),
-          countryData == null
-              ? Container()
-              : MostAffectedPanel(
-                  countryData: countryData,
-                ),
-          SizedBox(
-            height: 30,
-          ),
-          InfoPanel(),
-          SizedBox(
-            height: 50,
-          ),
-          Center(
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
               child: Text(
-            "WE ARE TOGETHER IN THE FIGHT",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          )),
-          SizedBox(
-            height: 50,
-          ),
-        ],
-      )),
+                'Most affected Countries',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+            ),
+            countryData == null
+                ? Container()
+                : MostAffectedPanel(
+                    countryData: countryData,
+                  ),
+            SizedBox(
+              height: 30,
+            ),
+            InfoPanel(),
+            SizedBox(
+              height: 50,
+            ),
+            Center(
+                child: Text(
+              "WE ARE TOGETHER IN THE FIGHT",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            )),
+            SizedBox(
+              height: 50,
+            ),
+          ],
+        )),
+      ),
     );
   }
 }
