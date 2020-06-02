@@ -28,19 +28,10 @@ class _IndiaPageState extends State<IndiaPage> {
     setState(() {
       indiaData = json.decode(response.body);
     });
-//    indiaData.map( (element) {
-//
-//      districtData.addAll(indiaData['districtData']);
-//    });
 
     for (var i = 0; i < indiaData.length; i++) {
-//      print(indiaData[i]);
-//      districtData.add(indiaData[i]['state']);
       for (var j = 0; j < indiaData[i]['districtData'].length; j++) {
-//        print(indiaData[i]['districtData'][j]);
-
-          districtData.add(indiaData[i]['districtData'][j]);
-
+        districtData.add(indiaData[i]['districtData'][j]);
       }
     }
   }
@@ -60,7 +51,8 @@ class _IndiaPageState extends State<IndiaPage> {
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
-              showSearch(context: context, delegate: DistrictSearch(districtData));
+              showSearch(
+                  context: context, delegate: DistrictSearch(districtData));
             },
           )
         ],
