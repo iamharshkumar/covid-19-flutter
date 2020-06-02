@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:covid19/data.dart';
 import 'package:covid19/pages/countryPage.dart';
+import 'package:covid19/pages/india.dart';
 import 'package:covid19/panels/infopanel.dart';
 import 'package:covid19/panels/mosteffectedcountries.dart';
 import 'package:covid19/panels/worldwidepanel.dart';
@@ -93,6 +94,28 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
+                              builder: (context) => IndiaPage()));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.only(left: 140),
+                      decoration: BoxDecoration(
+                          color: primaryBlack,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Text(
+                        'India states',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
                               builder: (context) => CountryPage()));
                     },
                     child: Container(
@@ -113,24 +136,24 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             worldData == null
+                ? Container()
+                : PieChart(
+                    dataMap: {
+                      'Confirmed': worldData['cases'].toDouble(),
+                      'Active': worldData['active'].toDouble(),
+                      'Recovered': worldData['recovered'].toDouble(),
+                      'Deaths': worldData['deaths'].toDouble(),
+                    },
+                    colorList: [
+                      Colors.deepOrangeAccent,
+                      Colors.blue,
+                      Colors.green,
+                      Colors.red,
+                    ],
+                  ),
+            worldData == null
                 ? Center(child: CircularProgressIndicator())
                 : WorldwidePanel(worldData: worldData),
-            worldData==null ? Container() :PieChart(
-              dataMap: {
-                'Confirmed': worldData['cases'].toDouble(),
-                'Active': worldData['active'].toDouble(),
-                'Recovered': worldData['recovered'].toDouble(),
-                'Deaths': worldData['deaths'].toDouble(),
-              },
-              colorList: [
-                Colors.deepOrangeAccent,
-                Colors.blue,
-                Colors.green,
-                Colors.red,
-
-
-              ],
-            ),
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
