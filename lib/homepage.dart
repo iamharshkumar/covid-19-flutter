@@ -89,49 +89,55 @@ class _HomePageState extends State<HomePage> {
                     'Worldwide',
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => IndiaPage()));
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.only(left: 140),
-                      decoration: BoxDecoration(
-                          color: primaryBlack,
-                          borderRadius: BorderRadius.circular(15)),
-                      child: Text(
-                        'India states',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                  Row(
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => IndiaPage()));
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+//                      margin: EdgeInsets.only(left: 140),
+                          decoration: BoxDecoration(
+                              color: primaryBlack,
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Text(
+                            'India states',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CountryPage()));
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          color: primaryBlack,
-                          borderRadius: BorderRadius.circular(15)),
-                      child: Text(
-                        'Regional',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                      SizedBox(width: 10,),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CountryPage()));
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              color: primaryBlack,
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Text(
+                            'Regional',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
+
                 ],
               ),
             ),
